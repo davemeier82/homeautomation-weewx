@@ -50,7 +50,9 @@ public class WeewxMessage {
   private String usUnits;
   private String luminosity;
   private String uvradiation;
-  private String UV;
+
+  @JsonProperty("UV")
+  private String uv;
   @JsonProperty("rain_cm")
   private String rainCm;
   @JsonProperty("stormRain_cm")
@@ -302,12 +304,12 @@ public class WeewxMessage {
     this.uvradiation = uvradiation;
   }
 
-  public String getUV() {
-    return UV;
+  public String getUv() {
+    return uv;
   }
 
-  public void setUV(String UV) {
-    this.UV = UV;
+  public void setUv(String uv) {
+    this.uv = uv;
   }
 
   public String getRainCm() {

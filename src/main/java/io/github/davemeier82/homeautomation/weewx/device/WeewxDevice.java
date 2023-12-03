@@ -125,7 +125,7 @@ public class WeewxDevice extends DefaultMqttSubscriber {
         WeewxMessage weewxMessage = objectMapper.readValue(message, WeewxMessage.class);
         ZonedDateTime dateTime = ZonedDateTime.now();
         if (weewxMessage.getDateTime() != null) {
-          Instant instant = Instant.ofEpochSecond(parseLong(weewxMessage.getDateTime()));
+          Instant instant = Instant.ofEpochSecond(Double.valueOf(weewxMessage.getDateTime()).longValue());
           dateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
         }
         if (weewxMessage.getInTempC() != null) {
@@ -200,9 +200,9 @@ public class WeewxDevice extends DefaultMqttSubscriber {
           deviceProperties.add(illuminanceSensor);
           illuminanceSensor.setIlluminanceInLux(new DataWithTimestamp<>(dateTime, Float.valueOf(weewxMessage.getLuminosity()).intValue()));
         }
-        if (weewxMessage.getUV() != null) {
+        if (weewxMessage.getUv() != null) {
           deviceProperties.add(uvSensor);
-          uvSensor.setUvIndex(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getUV())));
+          uvSensor.setUvIndex(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getUv())));
         }
         if (weewxMessage.getWindSpeedKmh() != null) {
           deviceProperties.add(windSensor);
