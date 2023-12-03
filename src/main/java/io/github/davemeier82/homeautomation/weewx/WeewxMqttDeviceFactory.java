@@ -81,7 +81,7 @@ public class WeewxMqttDeviceFactory implements MqttDeviceFactory {
                                      Map<String, String> customIdentifiers
   ) {
     if (supportsDeviceType(type)) {
-      WeewxDevice device = new WeewxDevice("weather/loop", displayName, objectMapper, eventPublisher, eventFactory, customIdentifiers);
+      WeewxDevice device = new WeewxDevice("weather", displayName, objectMapper, eventPublisher, eventFactory, customIdentifiers);
       log.debug("creating WeewxDevice device with id {} ({})", id, displayName);
       mqttClient.subscribe(device.getTopic(), device::processMessage);
 
