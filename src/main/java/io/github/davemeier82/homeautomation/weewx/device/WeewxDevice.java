@@ -3,7 +3,7 @@ package io.github.davemeier82.homeautomation.weewx.device;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.davemeier82.homeautomation.core.device.mqtt.DefaultMqttSubscriber;
-import io.github.davemeier82.homeautomation.core.device.property.*;
+import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import io.github.davemeier82.homeautomation.core.device.property.defaults.*;
 import io.github.davemeier82.homeautomation.core.event.DataWithTimestamp;
 import io.github.davemeier82.homeautomation.core.event.EventPublisher;
@@ -11,7 +11,6 @@ import io.github.davemeier82.homeautomation.core.event.factory.EventFactory;
 import io.github.davemeier82.homeautomation.weewx.WeewxMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
@@ -26,7 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Float.parseFloat;
-import static java.lang.Long.parseLong;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Comparator.comparingLong;
 
@@ -39,13 +37,19 @@ public class WeewxDevice extends DefaultMqttSubscriber {
   private final DefaultTemperatureSensor indoorTemperature;
   private final DefaultTemperatureSensor outdoorTemperature;
   private final DefaultTemperatureSensor apparentTemperature;
-  private final DefaultTemperatureSensor extraTemperature;
+  private final DefaultTemperatureSensor extraTemperature2;
+  private final DefaultTemperatureSensor extraTemperature3;
+  private final DefaultTemperatureSensor extraTemperature4;
+  private final DefaultTemperatureSensor extraTemperature5;
   private final DefaultTemperatureSensor windchillTemperature;
   private final DefaultTemperatureSensor indoorDewpointTemperature;
   private final DefaultTemperatureSensor outdoorDewpointTemperature;
-  private final DefaultHumiditySensor indoorHumitdity;
-  private final DefaultHumiditySensor outdoorHumitdity;
-  private final DefaultHumiditySensor extraHumitdity;
+  private final DefaultHumiditySensor indoorHumidity;
+  private final DefaultHumiditySensor outdoorHumidity;
+  private final DefaultHumiditySensor extraHumidity2;
+  private final DefaultHumiditySensor extraHumidity3;
+  private final DefaultHumiditySensor extraHumidity4;
+  private final DefaultHumiditySensor extraHumidity5;
   private final DefaultPressureSensor airPressure;
   private final DefaultPressureSensor altimeter;
   private final DefaultPressureSensor barometer;
@@ -79,13 +83,19 @@ public class WeewxDevice extends DefaultMqttSubscriber {
     indoorTemperature = new DefaultTemperatureSensor(i++, "indoorTemperature", this, eventPublisher, eventFactory);
     outdoorTemperature = new DefaultTemperatureSensor(i++, "outdoorTemperature", this, eventPublisher, eventFactory);
     apparentTemperature = new DefaultTemperatureSensor(i++, "apparentTemperature", this, eventPublisher, eventFactory);
-    extraTemperature = new DefaultTemperatureSensor(i++, "extraTemperature", this, eventPublisher, eventFactory);
+    extraTemperature2 = new DefaultTemperatureSensor(i++, "extraTemperature2", this, eventPublisher, eventFactory);
+    extraTemperature3 = new DefaultTemperatureSensor(i++, "extraTemperature3", this, eventPublisher, eventFactory);
+    extraTemperature4 = new DefaultTemperatureSensor(i++, "extraTemperature4", this, eventPublisher, eventFactory);
+    extraTemperature5 = new DefaultTemperatureSensor(i++, "extraTemperature5", this, eventPublisher, eventFactory);
     windchillTemperature = new DefaultTemperatureSensor(i++, "windchillTemperature", this, eventPublisher, eventFactory);
     indoorDewpointTemperature = new DefaultTemperatureSensor(i++, "indoorDewpointTemperature", this, eventPublisher, eventFactory);
     outdoorDewpointTemperature = new DefaultTemperatureSensor(i++, "outdoorDewpointTemperature", this, eventPublisher, eventFactory);
-    indoorHumitdity = new DefaultHumiditySensor(i++, "indoorHumitdity", this, eventPublisher, eventFactory);
-    outdoorHumitdity = new DefaultHumiditySensor(i++, "outdoorHumitdity", this, eventPublisher, eventFactory);
-    extraHumitdity = new DefaultHumiditySensor(i++, "extraHumitdity", this, eventPublisher, eventFactory);
+    indoorHumidity = new DefaultHumiditySensor(i++, "indoorHumidity", this, eventPublisher, eventFactory);
+    outdoorHumidity = new DefaultHumiditySensor(i++, "outdoorHumidity", this, eventPublisher, eventFactory);
+    extraHumidity2 = new DefaultHumiditySensor(i++, "extraHumidity2", this, eventPublisher, eventFactory);
+    extraHumidity3 = new DefaultHumiditySensor(i++, "extraHumidity3", this, eventPublisher, eventFactory);
+    extraHumidity4 = new DefaultHumiditySensor(i++, "extraHumidity4", this, eventPublisher, eventFactory);
+    extraHumidity5 = new DefaultHumiditySensor(i++, "extraHumidity5", this, eventPublisher, eventFactory);
     airPressure = new DefaultPressureSensor(i++, "airPressure", this, eventPublisher, eventFactory);
     altimeter = new DefaultPressureSensor(i++, "altimeter", this, eventPublisher, eventFactory);
     barometer = new DefaultPressureSensor(i++, "barometer", this, eventPublisher, eventFactory);
@@ -140,9 +150,21 @@ public class WeewxDevice extends DefaultMqttSubscriber {
           deviceProperties.add(apparentTemperature);
           apparentTemperature.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getAppTempC())));
         }
-        if (weewxMessage.getAppTempC() != null) {
-          deviceProperties.add(extraTemperature);
-          extraTemperature.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraTemp2C())));
+        if (weewxMessage.getExtraTemp2C() != null) {
+          deviceProperties.add(extraTemperature2);
+          extraTemperature2.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraTemp2C())));
+        }
+        if (weewxMessage.getExtraTemp3C() != null) {
+          deviceProperties.add(extraTemperature3);
+          extraTemperature3.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraTemp3C())));
+        }
+        if (weewxMessage.getExtraTemp4C() != null) {
+          deviceProperties.add(extraTemperature4);
+          extraTemperature4.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraTemp4C())));
+        }
+        if (weewxMessage.getExtraTemp5C() != null) {
+          deviceProperties.add(extraTemperature5);
+          extraTemperature5.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraTemp5C())));
         }
         if (weewxMessage.getWindchillC() != null) {
           deviceProperties.add(windchillTemperature);
@@ -157,16 +179,28 @@ public class WeewxDevice extends DefaultMqttSubscriber {
           outdoorDewpointTemperature.setTemperatureInDegree(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getDewpointC())));
         }
         if (weewxMessage.getInHumidity() != null) {
-          deviceProperties.add(indoorHumitdity);
-          indoorHumitdity.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getInHumidity())));
+          deviceProperties.add(indoorHumidity);
+          indoorHumidity.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getInHumidity())));
         }
         if (weewxMessage.getOutHumidity() != null) {
-          deviceProperties.add(outdoorHumitdity);
-          outdoorHumitdity.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getOutHumidity())));
+          deviceProperties.add(outdoorHumidity);
+          outdoorHumidity.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getOutHumidity())));
         }
         if (weewxMessage.getExtraHumid2() != null) {
-          deviceProperties.add(extraHumitdity);
-          extraHumitdity.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraHumid2())));
+          deviceProperties.add(extraHumidity2);
+          extraHumidity2.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraHumid2())));
+        }
+        if (weewxMessage.getExtraHumid3() != null) {
+          deviceProperties.add(extraHumidity3);
+          extraHumidity3.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraHumid3())));
+        }
+        if (weewxMessage.getExtraHumid4() != null) {
+          deviceProperties.add(extraHumidity4);
+          extraHumidity4.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraHumid4())));
+        }
+        if (weewxMessage.getExtraHumid5() != null) {
+          deviceProperties.add(extraHumidity5);
+          extraHumidity5.setRelativeHumidityInPercent(new DataWithTimestamp<>(dateTime, parseFloat(weewxMessage.getExtraHumid5())));
         }
         if (weewxMessage.getPressureMbar() != null) {
           deviceProperties.add(airPressure);

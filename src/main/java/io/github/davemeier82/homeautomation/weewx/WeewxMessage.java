@@ -74,7 +74,17 @@ public class WeewxMessage {
   private String wh65Signal;
   @JsonProperty("extraTemp2_C")
   private String extraTemp2C;
+  @JsonProperty("extraTemp3_C")
+  private String extraTemp3C;
+  @JsonProperty("extraTemp4_C")
+  private String extraTemp4C;
+  @JsonProperty("extraTemp5_C")
+  private String extraTemp5C;
+
   private String extraHumid2;
+  private String extraHumid3;
+  private String extraHumid4;
+  private String extraHumid5;
   @JsonProperty("wh31_ch2_batt")
   private String wh31Ch2Battery;
   @JsonProperty("wh31_ch2_sig")
@@ -462,5 +472,53 @@ public class WeewxMessage {
 
   public void setWh68Signal(String wh68Signal) {
     this.wh68Signal = wh68Signal;
+  }
+
+  public String getExtraTemp3C() {
+    return extraTemp3C;
+  }
+
+  public void setExtraTemp3C(String extraTemp3C) {
+    this.extraTemp3C = extraTemp3C;
+  }
+
+  public String getExtraTemp4C() {
+    return extraTemp4C;
+  }
+
+  public void setExtraTemp4C(String extraTemp4C) {
+    this.extraTemp4C = extraTemp4C;
+  }
+
+  public String getExtraTemp5C() {
+    return extraTemp5C;
+  }
+
+  public void setExtraTemp5C(String extraTemp5C) {
+    this.extraTemp5C = extraTemp5C;
+  }
+
+  public String getExtraHumid3() {
+    return extraHumid3;
+  }
+
+  public void setExtraHumid3(String extraHumid3) {
+    this.extraHumid3 = extraHumid3;
+  }
+
+  public String getExtraHumid4() {
+    return extraHumid4;
+  }
+
+  public void setExtraHumid4(String extraHumid4) {
+    this.extraHumid4 = extraHumid4;
+  }
+
+  public String getExtraHumid5() {
+    return extraHumid5;
+  }
+
+  public void setExtraHumid5(String extraHumid5) {
+    this.extraHumid5 = extraHumid5;
   }
 }
