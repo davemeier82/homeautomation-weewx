@@ -79,7 +79,7 @@ public class WeewxDevice extends DefaultMqttSubscriber {
     this.topic = topic;
     fullTopic = topic + "/loop";
     this.objectMapper = objectMapper;
-    long i = 0;
+    int i = 0;
     indoorTemperature = new DefaultTemperatureSensor(i++, "indoorTemperature", this, eventPublisher, eventFactory);
     outdoorTemperature = new DefaultTemperatureSensor(i++, "outdoorTemperature", this, eventPublisher, eventFactory);
     apparentTemperature = new DefaultTemperatureSensor(i++, "apparentTemperature", this, eventPublisher, eventFactory);
