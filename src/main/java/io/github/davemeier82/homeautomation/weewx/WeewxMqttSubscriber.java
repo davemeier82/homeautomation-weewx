@@ -38,6 +38,7 @@ import io.github.davemeier82.homeautomation.core.updater.WindGustSpeedValueUpdat
 import io.github.davemeier82.homeautomation.core.updater.WindRunValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.WindSpeedValueUpdateService;
 import io.github.davemeier82.homeautomation.weewx.device.WeewxDeviceType;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,6 +120,7 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
     return "weather/loop/#";
   }
 
+  @Transactional
   @Override
   public void processMessage(String topic, Optional<ByteBuffer> payload) {
     payload.ifPresent(byteBuffer -> {
