@@ -55,17 +55,16 @@
     </issueManagement>
 
     <properties>
-        <homeautomation-core.version>0.6.0</homeautomation-core.version>
         <commons-io.version>2.15.1</commons-io.version>
         <assertj-core.version>3.11.1</assertj-core.version>
-        <homeautomation-spring-core.version>0.5.2-SNAPSHOT</homeautomation-spring-core.version>
+        <homeautomation-spring-core.version>0.6.0</homeautomation-spring-core.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.github.davemeier82.homeautomation</groupId>
-            <artifactId>homeautomation-core</artifactId>
-            <version>${homeautomation-core.version}</version>
+            <artifactId>homeautomation-spring-core</artifactId>
+            <version>${homeautomation-spring-core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -99,11 +98,6 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.davemeier82.homeautomation</groupId>
-            <artifactId>homeautomation-spring-core</artifactId>
-            <version>${homeautomation-spring-core.version}</version>
         </dependency>
     </dependencies>
 
