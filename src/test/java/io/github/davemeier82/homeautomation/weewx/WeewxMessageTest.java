@@ -31,6 +31,7 @@ class WeewxMessageTest {
   void jsonDeserializationTest() throws IOException {
     WeewxMessage message = new ObjectMapper().readValue(resourceToString("/loop-payload.json", UTF_8), WeewxMessage.class);
     assertThat(message.getUv()).isEqualTo("1.0");
+    assertThat(message.getLuminosityLux()).isEqualTo("19194.0");
   }
 
 }

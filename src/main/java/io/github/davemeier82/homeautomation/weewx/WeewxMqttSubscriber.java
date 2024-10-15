@@ -26,6 +26,8 @@ import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
 import io.github.davemeier82.homeautomation.core.updater.CloudBaseValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.HumidityValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.IlluminanceValueUpdateService;
+import io.github.davemeier82.homeautomation.core.updater.LightningCountValueUpdateService;
+import io.github.davemeier82.homeautomation.core.updater.LightningDistanceValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.PressureValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.RainIntervalValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.RainRateValueUpdateService;
@@ -38,7 +40,6 @@ import io.github.davemeier82.homeautomation.core.updater.WindGustSpeedValueUpdat
 import io.github.davemeier82.homeautomation.core.updater.WindRunValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.WindSpeedValueUpdateService;
 import io.github.davemeier82.homeautomation.weewx.device.WeewxDeviceType;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +75,8 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
   private final WindGustSpeedValueUpdateService windGustSpeedValueUpdateService;
   private final WindGustDirectionValueUpdateService windGustDirectionValueUpdateService;
   private final WindRunValueUpdateService windRunValueUpdateService;
+  private final LightningCountValueUpdateService lightningCountValueUpdateService;
+  private final LightningDistanceValueUpdateService lightningDistanceValueUpdateService;
   private final DeviceRepository deviceRepository;
   private final WeewxDeviceFactory weewxDeviceFactory;
 
@@ -93,6 +96,8 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
       WindGustSpeedValueUpdateService windGustSpeedValueUpdateService,
       WindGustDirectionValueUpdateService windGustDirectionValueUpdateService,
       WindRunValueUpdateService windRunValueUpdateService,
+      LightningCountValueUpdateService lightningCountValueUpdateService,
+      LightningDistanceValueUpdateService lightningDistanceValueUpdateService,
       DeviceRepository deviceRepository,
       WeewxDeviceFactory weewxDeviceFactory
   ) {
@@ -110,6 +115,8 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
     this.windGustSpeedValueUpdateService = windGustSpeedValueUpdateService;
     this.windGustDirectionValueUpdateService = windGustDirectionValueUpdateService;
     this.windRunValueUpdateService = windRunValueUpdateService;
+    this.lightningCountValueUpdateService = lightningCountValueUpdateService;
+    this.lightningDistanceValueUpdateService = lightningDistanceValueUpdateService;
     this.objectMapper = objectMapper;
     this.deviceRepository = deviceRepository;
     this.weewxDeviceFactory = weewxDeviceFactory;
@@ -120,7 +127,6 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
     return "weather/loop/#";
   }
 
-  @Transactional
   @Override
   public void processMessage(String topic, Optional<ByteBuffer> payload) {
     payload.ifPresent(byteBuffer -> {
@@ -207,8 +213,8 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
         if (weewxMessage.getRainRateCmPerHour() != null) {
           rainRateValueUpdateService.setValue(parseFloat(weewxMessage.getRainRateCmPerHour()) * 10.0f, dateTime, createId("rain"), "Rain Rate");
         }
-        if (weewxMessage.getLuminosity() != null) {
-          illuminanceValueUpdateService.setValue(Float.valueOf(weewxMessage.getLuminosity()).intValue(), dateTime, createId("illuminance"), "Illuminance");
+        if (weewxMessage.getLuminosityLux() != null) {
+          illuminanceValueUpdateService.setValue(Float.valueOf(weewxMessage.getLuminosityLux()).intValue(), dateTime, createId("illuminance"), "Illuminance");
         }
         if (weewxMessage.getUv() != null) {
           uvIndexValueUpdateService.setValue(parseFloat(weewxMessage.getUv()), dateTime, createId("uv"), "UV Index");
@@ -227,6 +233,17 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
         }
         if (weewxMessage.getWindrunKm() != null) {
           windRunValueUpdateService.setValue(parseDouble(weewxMessage.getWindrunKm()), dateTime, createId("wind"), "Wind Run");
+        }
+        if (weewxMessage.getLightingDistanceKm() != null) {
+          OffsetDateTime lightningDateTime = dateTime;
+          if (weewxMessage.getLastLightningDateTime() != null) {
+            Instant instant = Instant.ofEpochSecond(Double.valueOf(weewxMessage.getLastLightningDateTime()).longValue());
+            lightningDateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
+          }
+          lightningDistanceValueUpdateService.setValue(Math.round(parseFloat(weewxMessage.getLightingDistanceKm())), lightningDateTime, createId("lightning"), "Lightning Distance");
+        }
+        if (weewxMessage.getLightingStrikeCount() != null) {
+          lightningCountValueUpdateService.setValue(Math.round(parseFloat(weewxMessage.getLightingStrikeCount())), dateTime, createId("lightning"), "Lightning Count");
         }
       } catch (JsonProcessingException e) {
         throw new UncheckedIOException(e);

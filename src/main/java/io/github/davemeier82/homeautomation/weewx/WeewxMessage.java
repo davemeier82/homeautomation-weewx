@@ -50,7 +50,8 @@ public class WeewxMessage {
   @JsonProperty("dayRain_cm")
   private String dayRainCm;
   private String usUnits;
-  private String luminosity;
+  @JsonProperty("luminosity_lux")
+  private String luminosityLux;
   private String uvradiation;
 
   @JsonProperty("UV")
@@ -99,6 +100,13 @@ public class WeewxMessage {
   private String wh68Battery;
   @JsonProperty("wh68_sig")
   private String wh68Signal;
+
+  @JsonProperty("lightning_distance_km")
+  private String lightingDistanceKm;
+  @JsonProperty("lightning_strike_count_count")
+  private String lightingStrikeCount;
+  @JsonProperty("lightning_last_det_time")
+  private String lastLightningDateTime;
 
   public String getDateTime() {
     return dateTime;
@@ -300,12 +308,12 @@ public class WeewxMessage {
     this.usUnits = usUnits;
   }
 
-  public String getLuminosity() {
-    return luminosity;
+  public String getLuminosityLux() {
+    return luminosityLux;
   }
 
-  public void setLuminosity(String luminosity) {
-    this.luminosity = luminosity;
+  public void setLuminosityLux(String luminosityLux) {
+    this.luminosityLux = luminosityLux;
   }
 
   public String getUvradiation() {
@@ -522,5 +530,29 @@ public class WeewxMessage {
 
   public void setExtraHumid5(String extraHumid5) {
     this.extraHumid5 = extraHumid5;
+  }
+
+  public String getLightingDistanceKm() {
+    return lightingDistanceKm;
+  }
+
+  public void setLightingDistanceKm(String lightingDistanceKm) {
+    this.lightingDistanceKm = lightingDistanceKm;
+  }
+
+  public String getLightingStrikeCount() {
+    return lightingStrikeCount;
+  }
+
+  public void setLightingStrikeCount(String lightingStrikeCount) {
+    this.lightingStrikeCount = lightingStrikeCount;
+  }
+
+  public String getLastLightningDateTime() {
+    return lastLightningDateTime;
+  }
+
+  public void setLastLightningDateTime(String lastLightningDateTime) {
+    this.lastLightningDateTime = lastLightningDateTime;
   }
 }

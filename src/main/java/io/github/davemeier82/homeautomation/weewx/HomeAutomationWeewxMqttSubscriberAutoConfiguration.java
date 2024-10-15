@@ -21,6 +21,8 @@ import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
 import io.github.davemeier82.homeautomation.core.updater.CloudBaseValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.HumidityValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.IlluminanceValueUpdateService;
+import io.github.davemeier82.homeautomation.core.updater.LightningCountValueUpdateService;
+import io.github.davemeier82.homeautomation.core.updater.LightningDistanceValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.PressureValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.RainIntervalValueUpdateService;
 import io.github.davemeier82.homeautomation.core.updater.RainRateValueUpdateService;
@@ -49,7 +51,8 @@ public class HomeAutomationWeewxMqttSubscriberAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnBean({ObjectMapper.class, TemperatureValueUpdateService.class, HumidityValueUpdateService.class, PressureValueUpdateService.class, CloudBaseValueUpdateService.class,
       RainIntervalValueUpdateService.class, RainTodayValueUpdateService.class, RainRateValueUpdateService.class, IlluminanceValueUpdateService.class, UvIndexValueUpdateService.class,
-      WindSpeedValueUpdateService.class, WindDirectionValueUpdateService.class, WindGustSpeedValueUpdateService.class, WindGustDirectionValueUpdateService.class, WindRunValueUpdateService.class})
+      WindSpeedValueUpdateService.class, WindDirectionValueUpdateService.class, WindGustSpeedValueUpdateService.class, WindGustDirectionValueUpdateService.class, WindRunValueUpdateService.class,
+      LightningDistanceValueUpdateService.class, LightningCountValueUpdateService.class})
   WeewxMqttSubscriber weewxMqttSubscriber(ObjectMapper objectMapper,
                                           TemperatureValueUpdateService temperatureValueUpdateService,
                                           HumidityValueUpdateService humidityValueUpdateService,
@@ -65,12 +68,15 @@ public class HomeAutomationWeewxMqttSubscriberAutoConfiguration {
                                           WindGustSpeedValueUpdateService windGustSpeedValueUpdateService,
                                           WindGustDirectionValueUpdateService windGustDirectionValueUpdateService,
                                           WindRunValueUpdateService windRunValueUpdateService,
+                                          LightningCountValueUpdateService lightningCountValueUpdateService,
+                                          LightningDistanceValueUpdateService lightningDistanceValueUpdateService,
                                           DeviceRepository deviceRepository,
                                           WeewxDeviceFactory weewxDeviceFactory
   ) {
     return new WeewxMqttSubscriber(objectMapper, temperatureValueUpdateService, humidityValueUpdateService, pressureValueUpdateService, cloudBaseValueUpdateService, rainIntervalValueUpdateService,
         rainTodayValueUpdateService, rainRateValueUpdateService, illuminanceValueUpdateService, uvIndexValueUpdateService, windSpeedValueUpdateService, windDirectionValueUpdateService,
-        windGustSpeedValueUpdateService, windGustDirectionValueUpdateService, windRunValueUpdateService, deviceRepository, weewxDeviceFactory);
+        windGustSpeedValueUpdateService, windGustDirectionValueUpdateService, windRunValueUpdateService, lightningCountValueUpdateService, lightningDistanceValueUpdateService, deviceRepository,
+        weewxDeviceFactory);
   }
 
 }
