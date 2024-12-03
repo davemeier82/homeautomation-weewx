@@ -24,7 +24,7 @@
     </parent>
 
     <artifactId>homeautomation-weewx</artifactId>
-    <version>0.6.3</version>
+    <version>0.6.4-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>HomeAutomation Weewx Integration</description>
@@ -47,7 +47,7 @@
         <connection>scm:git:git://github.com/davemeier82/homeautomation-weewx.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/davemeier82/homeautomation-weewx.git</developerConnection>
         <url>https://github.com/davemeier82/homeautomation-weewx</url>
-        <tag>homeautomation-weewx-0.6.3</tag>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
