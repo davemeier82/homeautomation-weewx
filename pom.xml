@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.github.davemeier82.homeautomation</groupId>
         <artifactId>homeautomation-parent</artifactId>
-        <version>0.6.4</version>
+        <version>0.6.5</version>
     </parent>
 
     <artifactId>homeautomation-weewx</artifactId>
@@ -55,9 +55,9 @@
     </issueManagement>
 
     <properties>
-        <commons-io.version>2.18.0</commons-io.version>
+        <commons-io.version>2.19.0</commons-io.version>
         <assertj-core.version>3.27.3</assertj-core.version>
-        <homeautomation-spring-core.version>0.6.4</homeautomation-spring-core.version>
+        <homeautomation-spring-core.version>0.6.5</homeautomation-spring-core.version>
     </properties>
 
     <dependencies>
