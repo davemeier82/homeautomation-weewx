@@ -16,8 +16,8 @@
 
 package io.github.davemeier82.homeautomation.weewx;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 

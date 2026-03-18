@@ -16,8 +16,6 @@
 
 package io.github.davemeier82.homeautomation.weewx;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.davemeier82.homeautomation.core.device.Device;
 import io.github.davemeier82.homeautomation.core.device.DeviceId;
 import io.github.davemeier82.homeautomation.core.device.mqtt.MqttSubscriber;
@@ -42,8 +40,8 @@ import io.github.davemeier82.homeautomation.core.updater.WindSpeedValueUpdateSer
 import io.github.davemeier82.homeautomation.weewx.device.WeewxDeviceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.databind.ObjectMapper;
 
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -137,116 +135,112 @@ public class WeewxMqttSubscriber implements MqttSubscriber {
         deviceRepository.save(newDevice);
         return newDevice;
       });
-      try {
-        WeewxMessage weewxMessage = objectMapper.readValue(message, WeewxMessage.class);
-        OffsetDateTime dateTime = OffsetDateTime.now();
-        if (weewxMessage.getDateTime() != null) {
-          Instant instant = Instant.ofEpochSecond(Double.valueOf(weewxMessage.getDateTime()).longValue());
-          dateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
+      WeewxMessage weewxMessage = objectMapper.readValue(message, WeewxMessage.class);
+      OffsetDateTime dateTime = OffsetDateTime.now();
+      if (weewxMessage.getDateTime() != null) {
+        Instant instant = Instant.ofEpochSecond(Double.valueOf(weewxMessage.getDateTime()).longValue());
+        dateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
+      }
+      if (weewxMessage.getInTempC() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getInTempC()), dateTime, createId("indoorTemperature"), "Indoor Temperature");
+      }
+      if (weewxMessage.getOutTempC() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getOutTempC()), dateTime, createId("outdoorTemperature"), "Outdoor Temperature");
+      }
+      if (weewxMessage.getAppTempC() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getAppTempC()), dateTime, createId("apparentTemperature"), "Apparent Temperature");
+      }
+      if (weewxMessage.getExtraTemp2C() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp2C()), dateTime, createId("extraTemperature2"), "Extra Temperature 2");
+      }
+      if (weewxMessage.getExtraTemp3C() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp3C()), dateTime, createId("extraTemperature3"), "Extra Temperature 3");
+      }
+      if (weewxMessage.getExtraTemp4C() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp4C()), dateTime, createId("extraTemperature4"), "Extra Temperature 4");
+      }
+      if (weewxMessage.getExtraTemp5C() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp5C()), dateTime, createId("extraTemperature5"), "Extra Temperature 5");
+      }
+      if (weewxMessage.getWindchillC() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getWindchillC()), dateTime, createId("windchillTemperature"), "Windchill Temperature 2");
+      }
+      if (weewxMessage.getInDewpointC() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getInDewpointC()), dateTime, createId("indoorDewpointTemperature"), "Indoor Dewpoint Temperature 2");
+      }
+      if (weewxMessage.getDewpointC() != null) {
+        temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getDewpointC()), dateTime, createId("outdoorDewpointTemperature"), "Outdoor Dewpoint Temperature 2");
+      }
+      if (weewxMessage.getInHumidity() != null) {
+        humidityValueUpdateService.setValue(parseFloat(weewxMessage.getInHumidity()), dateTime, createId("indoorHumidity"), "Indoor Humidity");
+      }
+      if (weewxMessage.getOutHumidity() != null) {
+        humidityValueUpdateService.setValue(parseFloat(weewxMessage.getOutHumidity()), dateTime, createId("outdoorHumidity"), "Outdoor Humidity");
+      }
+      if (weewxMessage.getExtraHumid2() != null) {
+        humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid2()), dateTime, createId("extraHumidity2"), "Extra Humidity 2");
+      }
+      if (weewxMessage.getExtraHumid3() != null) {
+        humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid3()), dateTime, createId("extraHumidity3"), "Extra Humidity 3");
+      }
+      if (weewxMessage.getExtraHumid4() != null) {
+        humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid4()), dateTime, createId("extraHumidity4"), "Extra Humidity 4");
+      }
+      if (weewxMessage.getExtraHumid5() != null) {
+        humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid5()), dateTime, createId("extraHumidity5"), "Extra Humidity 5");
+      }
+      if (weewxMessage.getPressureMbar() != null) {
+        pressureValueUpdateService.setValue(parseFloat(weewxMessage.getPressureMbar()), dateTime, createId("airPressure"), "Air Pressure");
+      }
+      if (weewxMessage.getBarometerMbar() != null) {
+        pressureValueUpdateService.setValue(parseFloat(weewxMessage.getBarometerMbar()), dateTime, createId("barometer"), "Barometer");
+      }
+      if (weewxMessage.getAltimeterMbar() != null) {
+        pressureValueUpdateService.setValue(parseFloat(weewxMessage.getAltimeterMbar()), dateTime, createId("altimeter"), "Altimeter");
+      }
+      if (weewxMessage.getCloudbaseMeter() != null) {
+        cloudBaseValueUpdateService.setValue(parseFloat(weewxMessage.getCloudbaseMeter()), dateTime, createId("cloudBase"), "Cloud Base");
+      }
+      if (weewxMessage.getRainCm() != null) {
+        rainIntervalValueUpdateService.setValue(parseFloat(weewxMessage.getRainCm()) * 10.0f, dateTime, createId("rain"), "Rain Interval");
+      }
+      if (weewxMessage.getDayRainCm() != null) {
+        rainTodayValueUpdateService.setValue(parseFloat(weewxMessage.getDayRainCm()) * 10.0f, dateTime, createId("rain"), "Rain Today");
+      }
+      if (weewxMessage.getRainRateCmPerHour() != null) {
+        rainRateValueUpdateService.setValue(parseFloat(weewxMessage.getRainRateCmPerHour()) * 10.0f, dateTime, createId("rain"), "Rain Rate");
+      }
+      if (weewxMessage.getLuminosityLux() != null) {
+        illuminanceValueUpdateService.setValue(Float.valueOf(weewxMessage.getLuminosityLux()).intValue(), dateTime, createId("illuminance"), "Illuminance");
+      }
+      if (weewxMessage.getUv() != null) {
+        uvIndexValueUpdateService.setValue(parseFloat(weewxMessage.getUv()), dateTime, createId("uv"), "UV Index");
+      }
+      if (weewxMessage.getWindSpeedKmh() != null) {
+        windSpeedValueUpdateService.setValue(parseFloat(weewxMessage.getWindSpeedKmh()), dateTime, createId("wind"), "Wind Speed");
+      }
+      if (weewxMessage.getWindDir() != null) {
+        windDirectionValueUpdateService.setValue(parseFloat(weewxMessage.getWindDir()), dateTime, createId("wind"), "Wind Direction");
+      }
+      if (weewxMessage.getWindGustKmh() != null) {
+        windGustSpeedValueUpdateService.setValue(parseFloat(weewxMessage.getWindGustKmh()), dateTime, createId("wind"), "Wind Gust Speed");
+      }
+      if (weewxMessage.getWindGustDir() != null) {
+        windGustDirectionValueUpdateService.setValue(parseFloat(weewxMessage.getWindGustDir()), dateTime, createId("wind"), "Wind Gust Direction");
+      }
+      if (weewxMessage.getWindrunKm() != null) {
+        windRunValueUpdateService.setValue(parseDouble(weewxMessage.getWindrunKm()), dateTime, createId("wind"), "Wind Run");
+      }
+      if (weewxMessage.getLightingDistanceKm() != null) {
+        OffsetDateTime lightningDateTime = dateTime;
+        if (weewxMessage.getLastLightningDateTime() != null) {
+          Instant instant = Instant.ofEpochSecond(Double.valueOf(weewxMessage.getLastLightningDateTime()).longValue());
+          lightningDateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
         }
-        if (weewxMessage.getInTempC() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getInTempC()), dateTime, createId("indoorTemperature"), "Indoor Temperature");
-        }
-        if (weewxMessage.getOutTempC() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getOutTempC()), dateTime, createId("outdoorTemperature"), "Outdoor Temperature");
-        }
-        if (weewxMessage.getAppTempC() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getAppTempC()), dateTime, createId("apparentTemperature"), "Apparent Temperature");
-        }
-        if (weewxMessage.getExtraTemp2C() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp2C()), dateTime, createId("extraTemperature2"), "Extra Temperature 2");
-        }
-        if (weewxMessage.getExtraTemp3C() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp3C()), dateTime, createId("extraTemperature3"), "Extra Temperature 3");
-        }
-        if (weewxMessage.getExtraTemp4C() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp4C()), dateTime, createId("extraTemperature4"), "Extra Temperature 4");
-        }
-        if (weewxMessage.getExtraTemp5C() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getExtraTemp5C()), dateTime, createId("extraTemperature5"), "Extra Temperature 5");
-        }
-        if (weewxMessage.getWindchillC() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getWindchillC()), dateTime, createId("windchillTemperature"), "Windchill Temperature 2");
-        }
-        if (weewxMessage.getInDewpointC() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getInDewpointC()), dateTime, createId("indoorDewpointTemperature"), "Indoor Dewpoint Temperature 2");
-        }
-        if (weewxMessage.getDewpointC() != null) {
-          temperatureValueUpdateService.setValue(parseFloat(weewxMessage.getDewpointC()), dateTime, createId("outdoorDewpointTemperature"), "Outdoor Dewpoint Temperature 2");
-        }
-        if (weewxMessage.getInHumidity() != null) {
-          humidityValueUpdateService.setValue(parseFloat(weewxMessage.getInHumidity()), dateTime, createId("indoorHumidity"), "Indoor Humidity");
-        }
-        if (weewxMessage.getOutHumidity() != null) {
-          humidityValueUpdateService.setValue(parseFloat(weewxMessage.getOutHumidity()), dateTime, createId("outdoorHumidity"), "Outdoor Humidity");
-        }
-        if (weewxMessage.getExtraHumid2() != null) {
-          humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid2()), dateTime, createId("extraHumidity2"), "Extra Humidity 2");
-        }
-        if (weewxMessage.getExtraHumid3() != null) {
-          humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid3()), dateTime, createId("extraHumidity3"), "Extra Humidity 3");
-        }
-        if (weewxMessage.getExtraHumid4() != null) {
-          humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid4()), dateTime, createId("extraHumidity4"), "Extra Humidity 4");
-        }
-        if (weewxMessage.getExtraHumid5() != null) {
-          humidityValueUpdateService.setValue(parseFloat(weewxMessage.getExtraHumid5()), dateTime, createId("extraHumidity5"), "Extra Humidity 5");
-        }
-        if (weewxMessage.getPressureMbar() != null) {
-          pressureValueUpdateService.setValue(parseFloat(weewxMessage.getPressureMbar()), dateTime, createId("airPressure"), "Air Pressure");
-        }
-        if (weewxMessage.getBarometerMbar() != null) {
-          pressureValueUpdateService.setValue(parseFloat(weewxMessage.getBarometerMbar()), dateTime, createId("barometer"), "Barometer");
-        }
-        if (weewxMessage.getAltimeterMbar() != null) {
-          pressureValueUpdateService.setValue(parseFloat(weewxMessage.getAltimeterMbar()), dateTime, createId("altimeter"), "Altimeter");
-        }
-        if (weewxMessage.getCloudbaseMeter() != null) {
-          cloudBaseValueUpdateService.setValue(parseFloat(weewxMessage.getCloudbaseMeter()), dateTime, createId("cloudBase"), "Cloud Base");
-        }
-        if (weewxMessage.getRainCm() != null) {
-          rainIntervalValueUpdateService.setValue(parseFloat(weewxMessage.getRainCm()) * 10.0f, dateTime, createId("rain"), "Rain Interval");
-        }
-        if (weewxMessage.getDayRainCm() != null) {
-          rainTodayValueUpdateService.setValue(parseFloat(weewxMessage.getDayRainCm()) * 10.0f, dateTime, createId("rain"), "Rain Today");
-        }
-        if (weewxMessage.getRainRateCmPerHour() != null) {
-          rainRateValueUpdateService.setValue(parseFloat(weewxMessage.getRainRateCmPerHour()) * 10.0f, dateTime, createId("rain"), "Rain Rate");
-        }
-        if (weewxMessage.getLuminosityLux() != null) {
-          illuminanceValueUpdateService.setValue(Float.valueOf(weewxMessage.getLuminosityLux()).intValue(), dateTime, createId("illuminance"), "Illuminance");
-        }
-        if (weewxMessage.getUv() != null) {
-          uvIndexValueUpdateService.setValue(parseFloat(weewxMessage.getUv()), dateTime, createId("uv"), "UV Index");
-        }
-        if (weewxMessage.getWindSpeedKmh() != null) {
-          windSpeedValueUpdateService.setValue(parseFloat(weewxMessage.getWindSpeedKmh()), dateTime, createId("wind"), "Wind Speed");
-        }
-        if (weewxMessage.getWindDir() != null) {
-          windDirectionValueUpdateService.setValue(parseFloat(weewxMessage.getWindDir()), dateTime, createId("wind"), "Wind Direction");
-        }
-        if (weewxMessage.getWindGustKmh() != null) {
-          windGustSpeedValueUpdateService.setValue(parseFloat(weewxMessage.getWindGustKmh()), dateTime, createId("wind"), "Wind Gust Speed");
-        }
-        if (weewxMessage.getWindGustDir() != null) {
-          windGustDirectionValueUpdateService.setValue(parseFloat(weewxMessage.getWindGustDir()), dateTime, createId("wind"), "Wind Gust Direction");
-        }
-        if (weewxMessage.getWindrunKm() != null) {
-          windRunValueUpdateService.setValue(parseDouble(weewxMessage.getWindrunKm()), dateTime, createId("wind"), "Wind Run");
-        }
-        if (weewxMessage.getLightingDistanceKm() != null) {
-          OffsetDateTime lightningDateTime = dateTime;
-          if (weewxMessage.getLastLightningDateTime() != null) {
-            Instant instant = Instant.ofEpochSecond(Double.valueOf(weewxMessage.getLastLightningDateTime()).longValue());
-            lightningDateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
-          }
-          lightningDistanceValueUpdateService.setValue(Math.round(parseFloat(weewxMessage.getLightingDistanceKm())), lightningDateTime, createId("lightning"), "Lightning Distance");
-        }
-        if (weewxMessage.getLightingStrikeCount() != null) {
-          lightningCountValueUpdateService.setValue(Math.round(parseFloat(weewxMessage.getLightingStrikeCount())), dateTime, createId("lightning"), "Lightning Count");
-        }
-      } catch (JsonProcessingException e) {
-        throw new UncheckedIOException(e);
+        lightningDistanceValueUpdateService.setValue(Math.round(parseFloat(weewxMessage.getLightingDistanceKm())), lightningDateTime, createId("lightning"), "Lightning Distance");
+      }
+      if (weewxMessage.getLightingStrikeCount() != null) {
+        lightningCountValueUpdateService.setValue(Math.round(parseFloat(weewxMessage.getLightingStrikeCount())), dateTime, createId("lightning"), "Lightning Count");
       }
     });
   }
